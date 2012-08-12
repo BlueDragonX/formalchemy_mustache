@@ -29,7 +29,7 @@ setup(
         "Programming Language :: Python :: 3.2",
         "Framework :: Pyramid",
         "License :: OSI Approved :: BSD License"],
-    keywords='web wsgi pylons formalchemy mustache',
+    keywords='web wsgi pylons pyramid formalchemy mustache',
     author='Ryan Bourgeois',
     author_email='bluedragonx@gmail.com',
     url='https://github.com/BlueDragonX/formalchemy_mustache',
