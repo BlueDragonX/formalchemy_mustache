@@ -10,9 +10,9 @@ Installation
 
 Get the source code and install the package:
 
-  git clone git://github.com/BlueDragonX/formalchemy_mustache.git
-  cd formalchemy_mustache
-  python setup.py install
+    git clone git://github.com/BlueDragonX/formalchemy_mustache.git
+    cd formalchemy_mustache
+    python setup.py install
 
 
 Usage
@@ -20,13 +20,13 @@ Usage
 
 To use with FormAlchemy:
 
-  from formalchemy_mustache import configure
-  dirs = ['/path_to_templates']
-  configure(directories=dirs)
+    from formalchemy_mustache import configure
+    dirs = ['/path_to_templates']
+    configure(directories=dirs)
 
 To use with Pyramid and pyramid_mustache, execute in main:
 
-  config.include('formalchemy_mustache.pyramid.configure')
+    config.include('formalchemy_mustache.pyramid.configure')
 
 
 Authors
