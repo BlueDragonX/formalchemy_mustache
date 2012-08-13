@@ -3,7 +3,7 @@
 # This project is free software according to the BSD-modified license. Refer to
 # the LICENSE file for complete details.
 """
-Test the pyramid_mustache.engines module.
+Test the formalchemy_mustache.engines module.
 """
 
 import os
@@ -39,7 +39,7 @@ class TestMustacheEngine(unittest.TestCase):
             'engine.get_template is invalid')
 
     def test_render(self):
-        name = 'test'
+        name = 'engine'
         data = {'test': 'this is a test'}
         expected = "Test: %s\n" % data['test']
         engine = MustacheEngine(directories=self.directories)
