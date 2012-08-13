@@ -21,6 +21,7 @@ class TestMustacheEngine(unittest.TestCase):
         """Set up the test data."""
         here = os.path.abspath(os.path.dirname(__file__))
         self.directories = [os.path.join(here, 'templates')]
+        self.tempalte = 'engine'
 
     def test_init(self):
         """Test the __init__ method."""
@@ -34,17 +35,16 @@ class TestMustacheEngine(unittest.TestCase):
         """Test the get_template method."""
         expected = "Test: {{test}}\n"
         engine = MustacheEngine(directories=self.directories)
-        output = engine.get_template('test')
+        output = engine.get_template(self.tempalte)
         self.assertEqual(output, expected,
             'engine.get_template is invalid')
 
     def test_render(self):
-        name = 'engine'
         data = {'test': 'this is a test'}
         expected = "Test: %s\n" % data['test']
         engine = MustacheEngine(directories=self.directories)
-        engine.templates[name] = engine.get_template(name)
-        output = engine.render(name, **data)
+        engine.templates[self.tempalte] = engine.get_template(self.tempalte)
+        output = engine.render(self.tempalte, **data)
         self.assertEqual(output, expected,
             'engine.render is invalid')
 
