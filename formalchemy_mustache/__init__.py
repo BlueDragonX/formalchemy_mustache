@@ -8,6 +8,7 @@ Implement Mustaches support in FormAlchemy
 
 from formalchemy import config
 from formalchemy_mustache.engines import MustacheEngine
+from formalchemy_mustache.fields import MustacheFieldRenderer
 
 
 def configure(directories=None):
