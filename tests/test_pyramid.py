@@ -58,20 +58,44 @@ class TestMustacheEngine(unittest.TestCase):
 
     def setUp(self):
         here = os.path.abspath(os.path.dirname(__file__))
-        self.directories = [os.path.join(here, 'templates')]
-        self.settings = {
-            'mustache.templates': ':'.join(self.directories)}
         self.package = 'formalchemy_mustache'
-        self.config = DummyConfig(self.package, self.settings)
+        self.directories_default = [os.path.join(here, 'templates')]
+        self.directories_custom = [os.path.join(here, 'templates/forms')]
+        self.settings_default = {
+            'mustache.templates': ':'.join(self.directories_default)}
+        self.config_default = DummyConfig(self.package, self.settings_default)
+        self.settings_custom = {
+            'mustache.templates': ':'.join(self.directories_default),
+            'mustache.forms': 'forms'}
+        self.config_custom = DummyConfig(self.package, self.settings_custom)
 
-    def test_init(self):
-        """Test the __init__ method."""
-        pyramid_mustache.configure(self.config)
-        configure(self.config)
+    def test_init_default(self):
+        """Test the __init__ method with default settings."""
+        pyramid_mustache.configure(self.config_default)
+        configure(self.config_default)
+        expected = "fieldset template\n"
+        output = config.engine.render('fieldset')
         self.assertIsInstance(config.engine, MustacheEngine,
             'config.engine is invalid')
-        self.assertEqual(config.engine.directories, self.directories,
+        self.assertEqual(config.engine.directories, self.directories_default,
             'config.engine.directories is invalid')
-        self.assertEqual(config.engine.renderer.search_dirs, self.directories,
+        self.assertEqual(config.engine.renderer.search_dirs, self.directories_default,
+            'config.engine.renderer.search_dirs is invalid')
+        self.assertEqual(output, expected,
+            'config.engine.render is invalid')
+
+    def test_init_custom(self):
+        """Test the __init__ method with custom settings."""
+        pyramid_mustache.configure(self.config_custom)
+        configure(self.config_custom)
+        expected = "fieldset template in forms\n"
+        output = config.engine.render('fieldset')
+        self.assertIsInstance(config.engine, MustacheEngine,
+            'config.engine is invalid')
+        self.assertEqual(config.engine.directories, self.directories_custom,
             'config.engine.directories is invalid')
+        self.assertEqual(config.engine.renderer.search_dirs, self.directories_custom,
+            'config.engine.renderer.search_dirs is invalid')
+        self.assertEqual(output, expected,
+            'config.engine.render is invalid')
 
