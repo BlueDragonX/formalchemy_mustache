@@ -8,21 +8,9 @@ Test the field formalchemy_mustache.fields module.
 
 import os
 import unittest
+from .dummy import DummyModel
 from formalchemy_mustache import configure, MustacheFieldRenderer
 from formalchemy import config, FieldSet
-from sqlalchemy import Column, String
-from sqlalchemy.ext.declarative import declarative_base
-Base = declarative_base()
-
-
-class DummyModel(Base):
-
-    """
-    Dummy SqlAlchemy model.
-    """
-
-    __tablename__ = 'dummy'
-    text = Column(String, primary_key=True)
 
 
 class TestMustacheFieldRenderer(unittest.TestCase):
