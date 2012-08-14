@@ -14,7 +14,7 @@ from formalchemy_mustache.engines import MustacheEngine
 
 def configure(config):
     """
-    Use pyramid and pyramid_mustache to configure FormAlchemy to use Mustache.
+    Use Pyramid to configure FormAlchemy to use Mustache.
 
     Settings:
       mustache.forms -- A subdirectory under the templates path to search for
@@ -26,5 +26,7 @@ def configure(config):
     if templates_key in settings:
         s = settings[templates_key]
         directories = [os.path.join(d, s) for d in directories]
+    here = os.path.abspath(os.path.dirname(__file__))
+    directories.append(os.path.join(here, 'templates'))
     formalchemy.config.engine = MustacheEngine(directories=directories)
 

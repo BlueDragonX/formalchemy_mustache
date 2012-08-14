@@ -8,6 +8,7 @@ Mustache template engine.
 
 from formalchemy.templates import TemplateEngine
 from pystache.renderer import Renderer
+from formalchemy_mustache.proxies import proxy_object
 
 
 class MustacheEngine(TemplateEngine):
@@ -37,6 +38,7 @@ class MustacheEngine(TemplateEngine):
             name = parts[0]
         return self.renderer.load_template(name)
 
+
     def render(self, name, **kw):
         """
         Render a template.
@@ -44,6 +46,7 @@ class MustacheEngine(TemplateEngine):
         :param name: The name of the template.
         :param **kw: The values to substitute in the template.
         """
+        kw = {k: proxy_object(v) for k, v in kw.iteritems()}
         template = self.templates.get(name, None)
         return self.renderer.render(template, kw)
 

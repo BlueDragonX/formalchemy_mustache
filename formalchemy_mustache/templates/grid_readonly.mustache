@@ -1,0 +1,18 @@
+{{#collection}}
+<thead>
+	<tr>
+		{{#labels}}
+		<th>{{label}}</th>
+		{{/labels}}
+	</tr>
+</thead>
+<tbody>
+	{{#rows}}
+	<tr class="{{mod}}">
+	{{#fields}}
+		<td>{{{render_readonly}}}</td>
+	{{/fields}}
+	</tr>
+	{{/rows}}
+</tbody>
+{{/collection}}

@@ -1,0 +1,21 @@
+{{#collection}}
+<thead>
+	<tr>
+		{{#labels}}
+		<th>{{label}}</th>
+		{{/labels}}
+	</tr>
+</thead>
+<tbody>
+	{{#rows}}
+	<tr class="{{mod}}">
+	{{#fields}}
+		<td>
+			{{{render}}}{{#errors}}
+			<span class="grid_error">{{error}}</span>{{/errors}}
+		</td>
+	{{/fields}}
+	</tr>
+	{{/rows}}
+</tbody>
+{{/collection}}

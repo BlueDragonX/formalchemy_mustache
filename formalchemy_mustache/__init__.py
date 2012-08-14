@@ -6,6 +6,7 @@
 Implement Mustaches support in FormAlchemy
 """
 
+import os
 from formalchemy import config
 from formalchemy_mustache.engines import MustacheEngine
 from formalchemy_mustache.fields import MustacheFieldRenderer
@@ -17,5 +18,9 @@ def configure(directories=None):
 
     :param directories: A list of directories to search for templates in.
     """
+    if directories is None:
+        directories = []
+    here = os.path.abspath(os.path.dirname(__file__))
+    directories.append(os.path.join(here, 'templates'))
     config.engine = MustacheEngine(directories=directories)
 

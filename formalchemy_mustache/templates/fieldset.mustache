@@ -1,0 +1,29 @@
+{{#fieldset}}
+{{#errors}}
+<div class="fieldset_error">{{error}}</div>
+{{/errors}}
+{{#fields}}
+{{#requires_label}}
+<div>
+	{{{label_tag}}}
+	{{{render}}}
+	{{#instructions}}
+	<span class="instructions">{{instructions}}</span>
+	{{/instructions}}
+	{{#errors}}
+	<span class="field_error">{{error}}</span>
+	{{/errors}}
+</div>
+{{#focus}}
+<script type="text/javascript">
+	//<![CDATA[
+	document.getElementById("{{renderer.name}}").focus();
+	//]]>
+</script>
+{{/focus}}
+{{/requires_label}}
+{{^requires_label}}
+{{{render}}}
+{{/requires_label}}
+{{/fields}}
+{{/fieldset}}
