@@ -62,3 +62,14 @@ class DummyModel(Base):
         """Convenience method for creating a model object."""
         return DummyModel(name=name, text=text)
 
+
+class DummyFieldSet:
+
+    """
+    Dummy FieldSet object.
+    """
+
+    def __init__(self, errors):
+        """Initialize the object."""
+        self.errors = errors
+

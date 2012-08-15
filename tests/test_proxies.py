@@ -7,9 +7,10 @@ Test the formalchemy_mustache.proxy module.
 """
 
 
+import os
 import unittest
 from formalchemy_mustache import proxies
-from .dummy import DummyModel
+from .dummy import DummyModel, DummyFieldSet
 from formalchemy.fields import Field
 from formalchemy.forms import FieldSet
 from formalchemy.tables import Grid
@@ -23,6 +24,9 @@ class BaseCase(unittest.TestCase):
 
     def setUp(self):
         """Set up test data."""
+        self.outputpath = os.path.join(
+            os.path.abspath(os.path.dirname(__file__)), 'output')
+
         self.models = [
             DummyModel.create('apple', 
                 'a red fruit that grows on trees'),
@@ -43,6 +47,12 @@ class BaseCase(unittest.TestCase):
         self.grid_rw = grid.bind(self.models)
         grid.configure(include=[grid.name, grid.text], readonly=True)
         self.grid_ro = grid.bind(self.models)
+
+    def get_output(self, name):
+        """Get the contents of an output file."""
+        outputfile = os.path.join(self.outputpath, "%s.out" % name)
+        with open(outputfile) as fd:
+            return fd.read()
 
 
 class TestFunctions(BaseCase):
@@ -266,4 +276,45 @@ class TestFieldProxy(BaseCase):
         proxy = proxies.FieldProxy(field)
         self.assertEqual(field.render_readonly(), proxy.render_readonly(),
             'proxy.render_readonly is invalid')
+
+
+class TestFieldSetProxy(BaseCase):
+
+    """
+    Test the FieldSetProxy object.
+    """
+
+    def test_init(self):
+        """Test the __init__ method."""
+        proxy = proxies.FieldSetProxy(self.fieldset_rw)
+        self.assertEqual(proxy.fieldset, self.fieldset_rw,
+            'proxy.fieldset is invalid')
+
+    def test_readonly(self):
+        """Test the readonly method."""
+        proxy = proxies.FieldSetProxy(self.fieldset_rw)
+        self.assertFalse(proxy.readonly(),
+            'proxy.readonly is invalid when read/write')
+
+        proxy = proxies.FieldSetProxy(self.fieldset_ro)
+        self.assertTrue(proxy.readonly(),
+            'proxy.readonly is invalid when read only')
+            
+    def test_fields(self):
+        fields = self.fieldset_rw.render_fields.values()
+        proxy = proxies.FieldSetProxy(self.fieldset_rw)
+        proxyfields = proxy.fields()
+        self.assertEqual(len(fields), len(proxyfields),
+            'proxy.fields returns invalid number of fields')
+        for pf in proxyfields:
+            self.assertTrue(pf.field in fields,
+                'proxy.fields contains invalid field')
+
+    def test_errors(self):
+        errorlist = ['error one', 'error two']
+        errordict = [{'error': 'error one'}, {'error': 'error two'}]
+        fieldset = DummyFieldSet(errorlist)
+        proxy = proxies.FieldSetProxy(fieldset)
+        self.assertEqual(proxy.errors(), errordict,
+            'proxy.errors is invalid')
 
