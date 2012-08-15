@@ -54,5 +54,11 @@ class DummyModel(Base):
     """
 
     __tablename__ = 'dummy'
-    text = Column(String, primary_key=True)
+    name = Column(String, primary_key=True)
+    text = Column(String)
+
+    @staticmethod
+    def create(cls, name, text=None):
+        """Convenience method for creating a model object."""
+        return DummyModel(name=name, text=text)
 

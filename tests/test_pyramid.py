@@ -9,6 +9,7 @@ Tests for formalchemy_mustache.pyramid.
 import os
 import unittest
 import pyramid_mustache
+import formalchemy_mustache
 from .dummy import DummyConfig
 from formalchemy import config
 from formalchemy_mustache import MustacheEngine
@@ -23,14 +24,19 @@ class TestMustacheEngine(unittest.TestCase):
 
     def setUp(self):
         here = os.path.abspath(os.path.dirname(__file__))
+        pkgpath = os.path.abspath(
+            os.path.dirname(formalchemy_mustache.__file__))
+        pkgtemplates = os.path.join(pkgpath, 'templates')
         self.package = 'formalchemy_mustache'
-        self.directories_default = [os.path.join(here, 'templates')]
-        self.directories_custom = [os.path.join(here, 'templates/forms')]
+        self.directories_default = [os.path.join(here, 'templates'),
+            pkgtemplates]
+        self.directories_custom = [os.path.join(here, 'templates/forms'),
+            pkgtemplates]
         self.settings_default = {
-            'mustache.templates': ':'.join(self.directories_default)}
+            'mustache.templates': ':'.join(self.directories_default[:-1])}
         self.config_default = DummyConfig(self.package, self.settings_default)
         self.settings_custom = {
-            'mustache.templates': ':'.join(self.directories_default),
+            'mustache.templates': ':'.join(self.directories_default[:-1]),
             'mustache.forms': 'forms'}
         self.config_custom = DummyConfig(self.package, self.settings_custom)
 

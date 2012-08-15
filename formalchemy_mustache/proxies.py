@@ -32,7 +32,7 @@ def proxy_fields(fields, focus=None):
     fields = [FieldProxy(fields[i], i % 2, fields[i]==focus)
         for i in range(len(fields))]
     if len(fields) > 0 and focus is True:
-        fields[0].focus = True
+        fields[0]._focus = True
     return fields
 
 
@@ -60,17 +60,19 @@ class FieldProxy(object):
         """Initialize the object."""
         self.field = field
         self._focus = focus
-        self.mod = even is None and None or (even and 'even' or 'odd')
+        if even is None:
+            even = True
+        self.mod = even and 'even' or 'odd'
 
     def name(self):
         """Get the name of the field."""
-        if not hasattr('name', self.field):
+        if not hasattr(self.field, 'name'):
             return None
         return self.field.name
 
     def value(self):
         """Get the value of the field."""
-        if not hasattr('value', self.field):
+        if not hasattr(self.field, 'value'):
             return None
         return self.field.value
 

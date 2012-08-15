@@ -29,8 +29,8 @@ class TestMustacheFieldRenderer(unittest.TestCase):
         self.template = 'field'
 
         self.output_extra = 'some extra data'
-        self.output_expected = "Name: %s-%s-%s\nValue: %s\nExtra: %s\n" % (
-            type(self.model).__name__, self.model.text, 'text', self.model.text, self.output_extra)
+        self.output_expected = "Name: %s--%s\nValue: %s\nExtra: %s\n" % (
+            type(self.model).__name__, 'text', self.model.text, self.output_extra)
 
     def test_init_without_dirs(self):
         """Test the __init__ method without the directories param."""
