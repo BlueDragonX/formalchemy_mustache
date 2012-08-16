@@ -8,8 +8,11 @@ Configure FormAlchemy to use Mustache through pyramid_mustache.
 
 import os
 import formalchemy
+import formalchemy_mustache
 from pyramid_mustache import session
 from formalchemy_mustache.engines import MustacheEngine
+
+__all__ = ['configure']
 
 
 def configure(config):
@@ -26,7 +29,5 @@ def configure(config):
     if templates_key in settings:
         s = settings[templates_key]
         directories = [os.path.join(d, s) for d in directories]
-    here = os.path.abspath(os.path.dirname(__file__))
-    directories.append(os.path.join(here, 'templates'))
-    formalchemy.config.engine = MustacheEngine(directories=directories)
+    formalchemy_mustache.configure(directories)
 

@@ -11,6 +11,8 @@ from formalchemy import config
 from formalchemy_mustache.engines import MustacheEngine
 from formalchemy_mustache.fields import MustacheFieldRenderer
 
+__all__ = ['configure', 'MustacheEngine', 'MustacheFieldRenderer']
+
 
 def configure(directories=None):
     """
