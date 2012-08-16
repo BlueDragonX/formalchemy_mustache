@@ -9,6 +9,7 @@ Test the formalchemy_mustache.proxy module.
 
 import os
 import unittest
+import formalchemy_mustache
 from formalchemy_mustache import proxies
 from .dummy import DummyModel, DummyFieldSet
 from formalchemy.fields import Field
@@ -47,12 +48,6 @@ class BaseCase(unittest.TestCase):
         self.grid_rw = grid.bind(self.models)
         grid.configure(include=[grid.name, grid.text], readonly=True)
         self.grid_ro = grid.bind(self.models)
-
-    def get_output(self, name):
-        """Get the contents of an output file."""
-        outputfile = os.path.join(self.outputpath, "%s.out" % name)
-        with open(outputfile) as fd:
-            return fd.read()
 
 
 class TestFunctions(BaseCase):
@@ -413,3 +408,44 @@ class TestGridProxy(BaseCase):
             self.assertTrue(r.row in self.models,
                 'proxy.rows returned invalid row')
 
+
+class TestRender(BaseCase):
+
+    """
+    Test rendering of proxied fieldsets.
+    """
+
+    def setUp(self):
+        BaseCase.setUp(self)
+        formalchemy_mustache.configure()
+
+    def get_output(self, name):
+        """Get the contents of an output file."""
+        outputfile = os.path.join(self.outputpath, "%s.out" % name)
+        with open(outputfile) as fd:
+            return fd.read()
+
+    def check_render_output(self, name):
+        """Check rendered output against an output file."""
+        fs = getattr(self, name)
+        output = fs.render()
+        expected = self.get_output(name)
+        self.assertEqual(output, expected,
+            '%s.render is invalid' % name)
+
+    def test_render_fieldset_rw(self):
+        """Test rendering a read/write fieldset."""
+        self.check_render_output('fieldset_rw')
+    '''
+    def test_render_fieldset_ro(self):
+        """Test rendering a readonly fieldset."""
+        self.check_render_output('fieldset_ro')
+
+    def test_render_grid_rw(self):
+        """Test rendering a read/write grid."""
+        self.check_render_output('grid_rw')
+
+    def test_render_grid_ro(self):
+        """Test rendering a readonly grid."""
+        self.check_render_output('grid_ro')
+    '''

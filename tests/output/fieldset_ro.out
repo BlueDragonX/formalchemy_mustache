@@ -1,0 +1,10 @@
+<tbody>
+	<tr>
+		<td class="field_readonly">Name</td>
+		<td>apple</td>
+	</tr>
+	<tr>
+		<td class="field_readonly">Text</td>
+		<td>a red fruit that grows on trees</td>
+	</tr>
+</tbody>

@@ -1,0 +1,13 @@
+<div>
+	<label class="field_req" for="DummyModel-apple-name">Name</label>
+	<input id="DummyModel-apple-name" name="DummyModel-apple-name" type="text" value="apple" />
+</div>
+<script type="text/javascript">
+	//<![CDATA[
+	document.getElementById("DummyModel-apple-name").focus();
+	//]]>
+</script>
+<div>
+	<label class="field_opt" for="DummyModel-apple-text">Text</label>
+	<input id="DummyModel-apple-text" name="DummyModel-apple-text" type="text" value="a red fruit that grows on trees" />
+</div>

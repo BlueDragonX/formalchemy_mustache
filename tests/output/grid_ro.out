@@ -1,0 +1,20 @@
+<thead>
+	<tr>
+		<th>Name</th>
+		<th>Text</th>
+	</tr>
+</thead>
+<tbody>
+	<tr class="odd">
+		<td>apple</td>
+		<td>a red fruit that grows on trees</td>
+	</tr>
+	<tr class="even">
+		<td>carrot</td>
+		<td>an orange vegetable that grows in the ground</td>
+	</tr>
+	<tr class="odd">
+		<td>kiwi</td>
+		<td>a brown fruit that is not a flightless bird</td>
+	</tr>
+</tbody>

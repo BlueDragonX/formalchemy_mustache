@@ -1,0 +1,32 @@
+<thead>
+	<tr>
+		<th>Name</th>
+		<th>Text</th>
+	</tr>
+</thead>
+<tbody>
+	<tr class="odd">
+		<td>
+			<input id="DummyModel-apple-name" name="DummyModel-apple-name" type="text" value="apple" />
+		</td>
+		<td>
+			<input id="DummyModel-apple-text" name="DummyModel-apple-text" type="text" value="a red fruit that grows on trees" />
+		</td>
+	</tr>
+	<tr class="even">
+		<td>
+			<input id="DummyModel-carrot-name" name="DummyModel-carrot-name" type="text" value="carrot" />
+		</td>
+		<td>
+			<input id="DummyModel-carrot-text" name="DummyModel-carrot-text" type="text" value="an orange vegetable that grows in the ground" />
+		</td>
+	</tr>
+	<tr class="odd">
+		<td>
+			<input id="DummyModel-kiwi-name" name="DummyModel-kiwi-name" type="text" value="kiwi" />
+		</td>
+		<td>
+			<input id="DummyModel-kiwi-text" name="DummyModel-kiwi-text" type="text" value="a brown fruit that is not a flightless bird" />
+		</td>
+	</tr>
+</tbody>
