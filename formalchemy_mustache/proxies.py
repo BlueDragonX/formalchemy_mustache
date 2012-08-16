@@ -6,6 +6,7 @@
 Proxy FormAlchemy objects for Mustache ease-of-use.
 """
 
+from copy import deepcopy
 from formalchemy.forms import FieldSet
 from formalchemy.tables import Grid
 from formalchemy.fields import AbstractField
@@ -63,6 +64,14 @@ class FieldProxy(object):
         if even is None:
             even = True
         self.mod = even and 'even' or 'odd'
+
+    def detach(self):
+        """
+        Detach the field from a fieldset in order to prevent changes to the
+        fieldset from affecting the field.
+        """
+        self.field = deepcopy(self.field)
+        self.field.parent = deepcopy(self.field.parent)
 
     def name(self):
         """Get the name of the field."""
@@ -162,8 +171,10 @@ class RowProxy(object):
     def __init__(self, grid, row, even):
         """Initialize the row."""
         grid._set_active(row)
+        self.row = row
         self.errors = proxy_errors(grid.get_errors(row))
         self.fields = proxy_fields(grid.render_fields, grid.focus)
+        [field.detach() for field in self.fields]
         self.mod = even and 'even' or 'odd'
 
 
@@ -187,7 +198,7 @@ class GridProxy(object):
         single item 'label'.
         """
         fields = self.grid.render_fields
-        return {'label': v.label() for v in fields.itervalues()}
+        return [{'label': v.label()} for v in fields.itervalues()]
 
     def rows(self):
         """Return a list of rows on the grid."""

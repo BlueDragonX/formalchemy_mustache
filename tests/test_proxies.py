@@ -28,11 +28,11 @@ class BaseCase(unittest.TestCase):
             os.path.abspath(os.path.dirname(__file__)), 'output')
 
         self.models = [
-            DummyModel.create('apple', 
+            DummyModel('apple', 
                 'a red fruit that grows on trees'),
-            DummyModel.create('carrot', 
+            DummyModel('carrot', 
                 'an orange vegetable that grows in the ground'),
-            DummyModel.create('kiwi',
+            DummyModel('kiwi',
                 'a brown fruit that is not a flightless bird')]
         self.model = self.models[0]
 
@@ -281,7 +281,7 @@ class TestFieldProxy(BaseCase):
 class TestFieldSetProxy(BaseCase):
 
     """
-    Test the FieldSetProxy object.
+    Test the FieldSetProxy class.
     """
 
     def test_init(self):
@@ -317,4 +317,99 @@ class TestFieldSetProxy(BaseCase):
         proxy = proxies.FieldSetProxy(fieldset)
         self.assertEqual(proxy.errors(), errordict,
             'proxy.errors is invalid')
+
+
+class TestRowProxy(BaseCase):
+
+    """
+    Test the RowProxy class.
+    """
+
+    def setUp(self):
+        """Set up test data."""
+        BaseCase.setUp(self)
+        self.row = self.grid_rw.rows[0]
+
+    def test_row(self):
+        """Test the row attribute after __init__."""
+        proxy = proxies.RowProxy(self.grid_rw, self.row, True)
+        self.assertEqual(proxy.row, self.row,
+            'proxy.row is invalid')
+
+    def test_errors(self):
+        """Test the errors attribute after __init__."""
+        proxy = proxies.RowProxy(self.grid_rw, self.row, True)
+        errors = self.grid_rw.get_errors(self.row)
+        proxyerrors = proxy.errors
+        self.assertEqual(len(errors), len(proxyerrors),
+            'proxy.errors returned incorrect error count')
+        for e in proxyerrors:
+            self.assertTrue(e['error'] in errors,
+                'proxy.errors returned invalid error')
+
+    def test_fields(self):
+        """Test the fields attribute after __init__."""
+        proxy = proxies.RowProxy(self.grid_rw, self.row, True)
+        fields = self.grid_rw.render_fields.values()
+        proxyfields = proxy.fields
+        self.assertEqual(len(fields), len(proxyfields),
+            'proxy.fields returned incorrect error count')
+        for f in proxyfields:
+            self.assertTrue(f.field in fields,
+                'proxy.fields returned invalid field')
+
+    def test_mod(self):
+        """Test the mod attribute after __init__."""
+        proxy = proxies.RowProxy(self.grid_rw, self.row, True)
+        self.assertEqual(proxy.mod, 'even',
+            'proxy.mod is invalid when event is True')
+
+        proxy = proxies.RowProxy(self.grid_rw, self.row, False)
+        self.assertEqual(proxy.mod, 'odd',
+            'proxy.mod is invalid when event is False')
+
+
+class TestGridProxy(BaseCase):
+
+    """
+    Test the GridProxy class.
+    """
+
+    def test_init(self):
+        """Test the init class."""
+        proxy = proxies.GridProxy(self.grid_rw)
+        self.assertEqual(proxy.grid, self.grid_rw,
+            'proxy.grid is invalid')
+
+    def test_readonly(self):
+        """Test the readonly method."""
+        proxy = proxies.GridProxy(self.grid_rw)
+        self.assertFalse(proxy.readonly(),
+            'proxy.readonly is invalid when read/write')
+
+        proxy = proxies.GridProxy(self.grid_ro)
+        self.assertTrue(proxy.readonly(),
+            'proxy.readonly is invalid when read only')
+
+    def test_labels(self):
+        """Test the labels method."""
+        labels = ['Name', 'Text']
+        proxy = proxies.GridProxy(self.grid_rw)
+        proxylabels = proxy.labels()
+        self.assertEqual(len(labels), len(proxylabels),
+            'proxy.labels returned incorrect label count')
+        for l in proxylabels:
+            self.assertTrue(l['label'] in labels,
+                'proxy.labels returned invalid label')
+
+
+    def test_rows(self):
+        """Test the rows method."""
+        proxy = proxies.GridProxy(self.grid_rw)
+        rows = proxy.rows()
+        self.assertEqual(len(self.models), len(rows),
+            'proxy.rows returned incorrect error count')
+        for r in rows:
+            self.assertTrue(r.row in self.models,
+                'proxy.rows returned invalid row')
 
