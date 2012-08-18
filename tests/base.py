@@ -26,7 +26,7 @@ class BaseCase(unittest.TestCase):
         package_here = os.path.abspath(
             os.path.dirname(formalchemy_mustache.__file__))
 
-        self.templates = os.path.join(here, 'templates')
+        self.templates = [os.path.join(here, 'templates')]
         self.package_templates = [os.path.join(package_here, 'templates')]
 
 
