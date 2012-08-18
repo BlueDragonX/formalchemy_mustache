@@ -16,6 +16,50 @@ from formalchemy_mustache import configure, MustacheFieldRenderer
 from formalchemy import config, FieldSet
 
 
+class TestBaseFieldRenderer(BaseCase):
+
+    """
+    Test the BaseFieldRenderer class.
+    """
+
+    def test_init(self):
+        """Test the __init__ method."""
+        self.assertRaises(fields.TemplateNameError, fields.BaseFieldRenderer,
+            self.field)
+
+    def test_implementation_default(self):
+        """Test inheriting from BaseFieldRenderer."""
+        templates = self.templates
+        class TestFieldRenderer(fields.BaseFieldRenderer):
+            template = 'field_test'
+        renderer = TestFieldRenderer(self.field)
+        self.assertEqual(renderer.field, self.field,
+            'renderer.field is invalid')
+        self.assertEqual(renderer.template, 'field_test',
+            'renderer.template is invalid')
+        self.assertEqual(renderer.readonly_template, 'field_readonly',
+            'renderer.readonly_template is invalid')
+        self.assertEqual(renderer.renderer.search_dirs, config.engine.directories,
+            'renderer.directories is invalid')
+
+    def test_implementation_override(self):
+        """Test inheriting from BaseFieldRenderer."""
+        templates = self.templates
+        class TestFieldRenderer(fields.BaseFieldRenderer):
+            template = 'field_test'
+            readonly_template = 'field_ro_test'
+            directories = templates
+        renderer = TestFieldRenderer(self.field)
+        self.assertEqual(renderer.field, self.field,
+            'renderer.field is invalid')
+        self.assertEqual(renderer.template, 'field_test',
+            'renderer.template is invalid')
+        self.assertEqual(renderer.readonly_template, 'field_ro_test',
+            'renderer.readonly_template is invalid')
+        self.assertEqual(renderer.renderer.search_dirs, templates,
+            'renderer.directories is invalid')
+
+
 class TestMustacheFieldRenderer(BaseCase):
 
     """
@@ -64,50 +108,6 @@ class TestMustacheFieldRenderer(BaseCase):
         output = renderer.render(extra=extra).strip()
         self.assertEqual(output, expected,
             'renderer.render is invalid')
-
-
-class TestBaseFieldRenderer(BaseCase):
-
-    """
-    Test the BaseFieldRenderer class.
-    """
-
-    def test_init(self):
-        """Test the __init__ method."""
-        self.assertRaises(fields.TemplateNameError, fields.BaseFieldRenderer,
-            self.field)
-
-    def test_implementation_default(self):
-        """Test inheriting from BaseFieldRenderer."""
-        templates = self.templates
-        class TestFieldRenderer(fields.BaseFieldRenderer):
-            template = 'field_test'
-        renderer = TestFieldRenderer(self.field)
-        self.assertEqual(renderer.field, self.field,
-            'renderer.field is invalid')
-        self.assertEqual(renderer.template, 'field_test',
-            'renderer.template is invalid')
-        self.assertEqual(renderer.readonly_template, 'field_readonly',
-            'renderer.readonly_template is invalid')
-        self.assertEqual(renderer.renderer.search_dirs, config.engine.directories,
-            'renderer.directories is invalid')
-
-    def test_implementation_override(self):
-        """Test inheriting from BaseFieldRenderer."""
-        templates = self.templates
-        class TestFieldRenderer(fields.BaseFieldRenderer):
-            template = 'field_test'
-            readonly_template = 'field_ro_test'
-            directories = templates
-        renderer = TestFieldRenderer(self.field)
-        self.assertEqual(renderer.field, self.field,
-            'renderer.field is invalid')
-        self.assertEqual(renderer.template, 'field_test',
-            'renderer.template is invalid')
-        self.assertEqual(renderer.readonly_template, 'field_ro_test',
-            'renderer.readonly_template is invalid')
-        self.assertEqual(renderer.renderer.search_dirs, templates,
-            'renderer.directories is invalid')
 
 
 class TestFieldRenderers(BaseCase):

@@ -106,7 +106,7 @@ class BaseFieldRenderer(fields.FieldRenderer):
 class MustacheFieldRenderer(BaseFieldRenderer):
 
     """
-    Generic FormAlchemy field renderer using Mustache.
+    Generic Mustache field renderer.
     """
 
     def __init__(self, field, template, readonly_template=None,
@@ -130,4 +130,6 @@ class MustacheFieldRenderer(BaseFieldRenderer):
 class TextFieldRenderer(BaseFieldRenderer):
     """Render a text input field."""
     template = 'field_text'
+
+
 
