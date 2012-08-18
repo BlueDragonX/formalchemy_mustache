@@ -6,6 +6,12 @@
 Base test case classes.
 """
 
+import os
+import unittest
+from .dummy import DummyModel
+from formalchemy.forms import FieldSet
+from formalchemy.tables import Grid
+
 
 class BaseCase(unittest.TestCase):
 
@@ -15,6 +21,14 @@ class BaseCase(unittest.TestCase):
 
     def setUp(self):
         """Set up test data."""
+        here = os.path.abspath(os.path.dirname(__file__))
+        package_here = os.path.abspath(
+            os.path.dirname(formalchemy_mustache.__file__))
+
+        self.templates = os.path.join(pkgpath, 'templates')
+        self.package_templates = [os.path.join(package_here, 'templates')]
+
+
         self.outputpath = os.path.join(
             os.path.abspath(os.path.dirname(__file__)), 'output')
 
@@ -38,6 +52,8 @@ class BaseCase(unittest.TestCase):
         self.grid_rw = grid.bind(self.models)
         grid.configure(include=[grid.name, grid.text], readonly=True)
         self.grid_ro = grid.bind(self.models)
+
+        self.field = fs.name
 
     def get_output(self, name):
         """Get the contents of an output file."""
