@@ -155,7 +155,7 @@ class FieldProxy(object):
         element dict with 'error' as the key.
         """
         if not self.field.errors:
-            return None
+            return []
         return self.field.errors
 
     def render(self):
@@ -191,7 +191,7 @@ class FieldSetProxy(object):
         element dict with 'error' as the key.
         """
         if not self.fieldset.errors:
-            return None
+            return []
         return self.fieldset.errors
 
 

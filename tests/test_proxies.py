@@ -56,14 +56,6 @@ class TestFunctions(BaseCase):
     Test module functions.
     """
 
-    def test_proxy_errors(self):
-        """Test the proxy_errors function."""
-        errorlist = ['error one', 'error two']
-        errordict = [{'error': 'error one'}, {'error': 'error two'}]
-        result = proxies.proxy_errors(errorlist)
-        self.assertEqual(result, errordict,
-            'proxy_errors is invalid')
-
     def test_proxy_fields(self):
         """Test the proxy_fields function."""
         fields = self.fieldset_rw.render_fields
@@ -370,10 +362,9 @@ class TestFieldSetProxy(BaseCase):
 
     def test_errors(self):
         errorlist = ['error one', 'error two']
-        errordict = [{'error': 'error one'}, {'error': 'error two'}]
         fieldset = DummyFieldSet(errorlist)
         proxy = proxies.FieldSetProxy(fieldset)
-        self.assertEqual(proxy.errors(), errordict,
+        self.assertEqual(proxy.errors(), errorlist,
             'proxy.errors is invalid')
 
 
