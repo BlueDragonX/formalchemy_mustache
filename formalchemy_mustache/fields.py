@@ -14,7 +14,7 @@ from formalchemy_mustache.proxies import proxy_object
 class MustacheFieldRenderer(fields.FieldRenderer):
 
     """
-    Renderer a FormAlchemy field using a Mustache template.
+    Generic FormAlchemy field renderer using Mustache.
     """
 
     def __init__(self, field, template, readonly_template=None,
@@ -38,51 +38,64 @@ class MustacheFieldRenderer(fields.FieldRenderer):
         self.readonly_template = readonly_template
         self.renderer = Renderer(search_dirs=directories)
 
-    def _render(self, template, subs):
+    def _render(self, template, opts):
         """
         Render a template.
 
         :param template: The name of the template.
-        :param subs: Template substitutions.
+        :param opts: Field options.
         """
-        subs.update({'field': proxy_object(self.field)})
+        subs = {
+            'renderer': self,
+            'field': proxy_object(self.field),
+            'options': proxy_object(opts),
+            'html': proxy_object(self.field.html_options)}
         content = self.renderer.load_template(template)
         return self.renderer.render(content, subs)
 
-    def render(self, **kw):
+    def render(self, **opts):
         """
         Render the field.
 
-        :param **kw: Additional template substitutions.
+        :param **opts: Field renderer options.
         """
-        return self._render(self.template, kw)
+        return self._render(self.template, opts)
 
-    def render_readonly(self, **kw):
+    def render_readonly(self, **opts):
         """
         Render the field readonly.
 
-        :param **kw: Additional template substitutions.
+        :param **opts: Field renderer options.
         """
-        return self._render(self.readonly_template, kw)
+        return self._render(self.readonly_template, opts)
 
-    @classmethod
-    def factory(cls, template, readonly_template=None, directories=None):
+
+class BaseFieldRenderer(MustacheFieldRenderer):
+
+    """
+    Mustache field renderer which uses class attributes to configure itself.
+    """
+
+    template = None
+    readonly_template = None
+    directories = None
+
+    def __init__(self, field):
         """
-        Create a field renderer that uses the given template.
+        Initialize the field renderer. Calls MustacheFieldRenderer.__init__
+        with self.template, self.readonly_template, and self.directories for
+        the template, readonly_template, and directories parameters. These
+        values are None by default and should be overridden by the inheriting
+        class. The template attribute is required at minimum.
 
         :param field: The field to render.
-        :param template: The template to use when rendering the field.
-        :param readonly_template: The template to use when rendering the field
-            readonly. If None defaults to 'field_readonly'.
-        :param directories: The directories to search for the template in. If
-            None then this will be taken from formalchemy.config.engine.
         """
-        class Renderer(MustacheFieldRenderer):
-            def __init__(self, field):
-                """Initialize the field renderer."""
-                MustacheFieldRenderer.__init__(self, field, template,
-                    readonly_template, directories)
-        Renderer.__doc__ = ('Render a field using the %s Mustache template.' %
-            template)
-        return Renderer
+        MustacheFieldRenderer.__init__(self, field, self.template,
+            self.readonly_template, self.directories)
+
+
+class TextFieldRenderer(BaseFieldRenderer):
+    """Render a text input field."""
+    template = 'field_text'
+
 
