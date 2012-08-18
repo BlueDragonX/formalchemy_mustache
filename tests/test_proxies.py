@@ -123,7 +123,7 @@ class TestFunctions(BaseCase):
 class TestDictProxy(unittest.TestCase):
 
     """
-    Test the DicyProxy class.
+    Test the DictProxy class.
     """
 
     def setUp(self):
