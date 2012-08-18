@@ -23,6 +23,6 @@ def configure(directories=None):
     if directories is None:
         directories = []
     here = os.path.abspath(os.path.dirname(__file__))
-    directories.append(os.path.join(here, 'templates'))
+    directories = directories + [os.path.join(here, 'templates')]
     config.engine = MustacheEngine(directories=directories)
 
