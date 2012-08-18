@@ -74,17 +74,25 @@ class TestBaseFieldRenderer(BaseCase):
 
     def test_init(self):
         """Test the __init__ method."""
-        renderer = fields.BaseFieldRenderer(self.field)
+        self.assertRaises(fields.TemplateNameError, fields.BaseFieldRenderer,
+            self.field)
+
+    def test_implementation_default(self):
+        """Test inheriting from BaseFieldRenderer."""
+        templates = self.templates
+        class TestFieldRenderer(fields.BaseFieldRenderer):
+            template = 'field_test'
+        renderer = TestFieldRenderer(self.field)
         self.assertEqual(renderer.field, self.field,
             'renderer.field is invalid')
-        self.assertEqual(renderer.template, None,
+        self.assertEqual(renderer.template, 'field_test',
             'renderer.template is invalid')
         self.assertEqual(renderer.readonly_template, 'field_readonly',
             'renderer.readonly_template is invalid')
         self.assertEqual(renderer.renderer.search_dirs, config.engine.directories,
             'renderer.directories is invalid')
 
-    def test_implementation(self):
+    def test_implementation_override(self):
         """Test inheriting from BaseFieldRenderer."""
         templates = self.templates
         class TestFieldRenderer(fields.BaseFieldRenderer):
