@@ -112,6 +112,69 @@ class TestFunctions(BaseCase):
         self.assertEqual(proxy.field, field,
             'field proxy contains invalid field')
 
+        itemdict = {'one': 'item one', 'two': 'item two'}
+        proxy = proxies.proxy_object(itemdict)
+        self.assertIsInstance(proxy, proxies.DictProxy,
+            'dict proxy has invalid type')
+        self.assertEqual(proxy.items, itemdict,
+            'dict proxy contains invalid field')
+
+
+class TestDictProxy(unittest.TestCase):
+
+    """
+    Test the DicyProxy class.
+    """
+
+    def setUp(self):
+        self.items = {'one': 'first item', 'two': 'second item'}
+        self.keyname = 'k'
+        self.valuename = 'v'
+        self.iter_default = [
+            {'key': 'one', 'value': 'first item'},
+            {'key': 'two', 'value': 'second item'}]
+        self.iter_custom = [
+            {'k': 'one', 'v': 'first item'},
+            {'k': 'two', 'v': 'second item'}]
+
+    def test_init_default(self):
+        """Test the __init__ method with default key and value names."""
+        proxy = proxies.DictProxy(self.items)
+        self.assertEqual(self.items, proxy.items,
+            'proxy.items is invalid')
+        self.assertEqual(proxy.keyname, 'key',
+            'proxy.keyname is invalid')
+        self.assertEqual(proxy.valuename, 'value',
+            'proxy.valuename is invalid')
+
+    def test_init_custom(self):
+        """Test the __init__ method with custom key and value names."""
+        proxy = proxies.DictProxy(self.items, self.keyname, self.valuename)
+        self.assertEqual(self.items, proxy.items,
+            'proxy.items is invalid')
+        self.assertEqual(proxy.keyname, self.keyname,
+            'proxy.keyname is invalid')
+        self.assertEqual(proxy.valuename, self.valuename,
+            'proxy.valuename is invalid')
+
+    def test_iter_default(self):
+        """Test the __iter__ method for default key/value names."""
+        proxy = proxies.DictProxy(self.items)
+        self.assertEqual(len(proxy), len(self.iter_default),
+            'default DictProxy contains invalid number of items')
+        for item in proxy:
+            self.assertTrue(item in self.iter_default,
+                'default DictProxy contains invalid item')
+
+    def test_iter_default(self):
+        """Test the __iter__ method for custom key/value names."""
+        proxy = proxies.DictProxy(self.items, self.keyname, self.valuename)
+        self.assertEqual(len(proxy), len(self.iter_custom),
+            'custom DictProxy contains invalid number of items')
+        for item in proxy:
+            self.assertTrue(item in self.iter_custom,
+                'custom DictProxy contains invalid item')
+
 
 class TestFieldProxy(BaseCase):
 

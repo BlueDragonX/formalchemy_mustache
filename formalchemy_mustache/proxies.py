@@ -48,7 +48,46 @@ def proxy_object(obj):
         return FieldSetProxy(obj)
     if isinstance(obj, AbstractField):
         return FieldProxy(obj)
+    if isinstance(obj, dict):
+        return DictProxy(obj)
     return obj
+
+
+class DictProxy(object):
+
+    """
+    Proxy a dictionary. Allows iterating over the items as a listo of
+    {'key': key, 'value': value} items.
+    """
+
+    def __init__(self, items, keyname='key', valuename='value'):
+        """
+        Initialize the proxy.
+
+        :param items: The dictionary to proxy.
+        :param keyname: The name of the key key when iterating.
+        :param valuename: The name of the value key when iterating.
+        """
+        self.items = items
+        self.keyname = keyname
+        self.valuename = valuename
+
+    def __hasattr__(self, attr):
+        """Check if a key exists in the dictionary."""
+        return attr in self.items
+
+    def __getattr__(self, attr):
+        """Get a dictionary value."""
+        return self.items[attr]
+
+    def __iter__(self):
+        """Return an iterator for the proxy."""
+        return [{self.keyname: k, self.valuename: v}
+            for k, v in self.items.iteritems()].__iter__()
+
+    def __len__(self):
+        """Return the number of items."""
+        return len(self.items)
 
 
 class FieldProxy(object):
