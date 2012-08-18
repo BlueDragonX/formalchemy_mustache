@@ -54,7 +54,7 @@ class BaseCase(unittest.TestCase):
         grid.configure(include=[grid.name, grid.text], readonly=True)
         self.grid_ro = grid.bind(self.models)
 
-        self.field = fs.name
+        self.field = self.fieldset_rw.name
 
     def get_output(self, name):
         """Get the contents of an output file."""
