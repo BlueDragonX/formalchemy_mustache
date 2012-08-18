@@ -8,6 +8,7 @@ Tests for formalchemy_mustache.__init__.
 
 import os
 import unittest
+import formalchemy_mustache
 from formalchemy import config
 from formalchemy_mustache import configure, MustacheEngine
 
@@ -21,12 +22,16 @@ class TestModule(unittest.TestCase):
     def test_configure(self):
         """Test the configure function."""
         here = os.path.abspath(os.path.dirname(__file__))
+        pkgpath = os.path.abspath(
+            os.path.dirname(formalchemy_mustache.__file__))
+        pkgtemplates = [os.path.join(pkgpath, 'templates')]
         dirs = [os.path.join(here, 'templates')]
         configure(dirs)
         self.assertIsInstance(config.engine, MustacheEngine,
             'config.engine is invalid')
-        self.assertEqual(config.engine.directories, dirs,
+        self.assertEqual(config.engine.directories, dirs + pkgtemplates,
             'config.engine.directories is invalid')
-        self.assertEqual(config.engine.renderer.search_dirs, dirs,
+        self.assertEqual(config.engine.renderer.search_dirs,
+            dirs + pkgtemplates,
             'config.engine.search_dirs is invalid')
 
