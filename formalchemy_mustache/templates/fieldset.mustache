@@ -1,6 +1,6 @@
 {{#fieldset}}
 {{#errors}}
-<div class="fieldset_error">{{error}}</div>
+<div class="fieldset_error">{{.}}</div>
 {{/errors}}
 {{#fields}}
 {{#requires_label}}
@@ -11,7 +11,7 @@
 	<span class="instructions">{{instructions}}</span>
 	{{/instructions}}
 	{{#errors}}
-	<span class="field_error">{{error}}</span>
+	<span class="field_error">{{.}}</span>
 	{{/errors}}
 </div>
 {{#focus}}

@@ -12,16 +12,6 @@ from formalchemy.tables import Grid
 from formalchemy.fields import AbstractField
 
 
-def proxy_errors(errors):
-    """
-    Proxy a list of errors. Returns a list of dicts. Each dict contains one
-    item with key 'error'. This item contains the error text.
-    """
-    if errors is None:
-        return []
-    return [{'error': error} for error in errors]
-
-
 def proxy_fields(fields, focus=None):
     """
     Proxy a list of fields. If focus is a field object in fields then that
@@ -164,7 +154,9 @@ class FieldProxy(object):
         Get a list of errors that have occurred. Each item in the list is a one
         element dict with 'error' as the key.
         """
-        return proxy_errors(self.field.errors)
+        if not self.field.errors:
+            return None
+        return self.field.errors
 
     def render(self):
         """Render the field."""
@@ -198,7 +190,9 @@ class FieldSetProxy(object):
         Get a list of errors that have occurred. Each item in the list is a one
         element dict with 'error' as the key.
         """
-        return proxy_errors(self.fieldset.errors)
+        if not self.fieldset.errors:
+            return None
+        return self.fieldset.errors
 
 
 class RowProxy(object):
@@ -211,7 +205,7 @@ class RowProxy(object):
         """Initialize the row."""
         grid._set_active(row)
         self.row = row
-        self.errors = proxy_errors(grid.get_errors(row))
+        self.errors = grid.get_errors(row)
         self.fields = proxy_fields(grid.render_fields, grid.focus)
         [field.detach() for field in self.fields]
         self.mod = even and 'even' or 'odd'
