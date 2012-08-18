@@ -49,6 +49,12 @@ class BaseCase(unittest.TestCase):
         grid.configure(include=[grid.name, grid.text], readonly=True)
         self.grid_ro = grid.bind(self.models)
 
+    def get_output(self, name):
+        """Get the contents of an output file."""
+        outputfile = os.path.join(self.outputpath, "%s.out" % name)
+        with open(outputfile) as fd:
+            return fd.read()
+
 
 class TestFunctions(BaseCase):
 
@@ -472,12 +478,6 @@ class TestRender(BaseCase):
     def setUp(self):
         BaseCase.setUp(self)
         formalchemy_mustache.configure()
-
-    def get_output(self, name):
-        """Get the contents of an output file."""
-        outputfile = os.path.join(self.outputpath, "%s.out" % name)
-        with open(outputfile) as fd:
-            return fd.read()
 
     def check_render_output(self, name):
         """Check rendered output against an output file."""
