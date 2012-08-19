@@ -8,6 +8,7 @@ Mustache field renderers.
 
 from formalchemy import config, fields
 from pystache.renderer import Renderer
+from formalchemy import FieldSet, fatypes
 from formalchemy_mustache.proxies import proxy_object, DictProxy
 
 
@@ -210,7 +211,7 @@ class TextFieldRenderer(BaseFieldRenderer):
     template = 'field_text'
 
 
-class TextAreaRenderer(BaseFieldRenderer):
+class TextAreaFieldRenderer(BaseFieldRenderer):
     """Render a text field as a text area."""
     template = 'field_textarea'
 
@@ -224,4 +225,28 @@ class PasswordFieldRenderer(BaseFieldRenderer):
 class NumberFieldRenderer(BaseFieldRenderer):
     """Render a number input field."""
     template = 'field_number'
+
+
+def get_default_renderers():
+    """
+    Generate the default_renderers attribute for a FieldSet. Overrides the
+    default renderers with their formalchemy_mustache counterparts.
+    """
+    renderers = dict(FieldSet.default_renderers)
+    renderers.update({
+        fatypes.String: TextFieldRenderer,
+        fatypes.Unicode: TextFieldRenderer,
+        fatypes.Text: TextFieldRenderer,
+        fatypes.Integer: NumberFieldRenderer,
+        fatypes.Boolean: CheckBoxFieldRenderer,
+        fatypes.List: SelectFieldRenderer,
+        fatypes.Set: SelectFieldRenderer,
+        'dropdown': SelectFieldRenderer,
+        'checkbox': CheckBoxSet,
+        'radio': RadioSet,
+        'password': PasswordFieldRenderer,
+        'textarea': TextAreaFieldRenderer,
+        fatypes.HTML5Number: NumberFieldRenderer,
+        'number': NumberFieldRenderer})
+    return renderers
 

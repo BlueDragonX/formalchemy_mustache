@@ -211,7 +211,7 @@ class TestFieldRenderers(BaseCase):
         """Test the TextAreaFieldRenderer class."""
         html = {'class': 'test', 'cols': 80, 'rows': 30}
         self.check_renderer('textarea', self.field_text, self.field_none, html=html,
-            renderer=fields.TextAreaRenderer)
+            renderer=fields.TextAreaFieldRenderer)
 
     def test_number(self):
         """Test the NumberFieldRenderer class."""
