@@ -178,5 +178,17 @@ class TestFieldRenderers(BaseCase):
         """Test the RadioSet class."""
         html = {'class': 'test'}
         self.check_renderer('radio_set', self.field, renderer=fields.RadioSet,
-            html=html, options=self.options)
+            html=html, options=self.set_options)
+
+    def test_checkbox_set(self):
+        """Test the CheckBoxSet class."""
+        html = {'class': 'test'}
+        self.check_renderer('checkbox_set', self.field,
+            renderer=fields.CheckBoxSet, html=html, options=self.set_options)
+
+    def test_select(self):
+        """Test the SelectFieldRenderer class."""
+        html = {'class': 'test'}
+        self.check_renderer('select', self.field, html=html,
+            options=self.select_options)
 

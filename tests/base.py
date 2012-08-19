@@ -56,10 +56,11 @@ class BaseCase(unittest.TestCase):
 
         self.field = self.fieldset_rw.name
 
-        self.options = [
+        self.set_options = [
             ('apple', 'Red Apple'),
             ('orange', 'Florida Orange'),
             ('grape', 'Green Grape')]
+        self.select_options = [(v, k) for k, v in self.set_options]
 
     def get_output(self, name):
         """Get the contents of an output file."""

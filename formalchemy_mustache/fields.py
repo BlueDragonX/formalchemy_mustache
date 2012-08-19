@@ -136,6 +136,10 @@ class WidgetSet(BaseFieldRenderer):
 
     def selected(self, choice):
         """Check if a choice is selected."""
+        if self.value is None:
+            return False
+        if self.field.is_collection:
+            return choice in self.value
         return choice == self.value
 
     def proxy_choices(self, choices):
@@ -147,6 +151,14 @@ class WidgetSet(BaseFieldRenderer):
             choices = choices.items()
         return [choice(self.name, value, label, self.selected(value))
             for value, label in choices]
+
+    def _serialized_value(self):
+        """Serialize the value."""
+        if self.name not in self.params:
+            if self.field.is_collection:
+                return []
+            return None
+        return FieldRenderer._serialized_value(self)
 
     def _render(self, template, options):
         """
@@ -164,7 +176,30 @@ class RadioSet(WidgetSet):
     template = 'field_radio_set'
 
 
+class CheckBoxSet(WidgetSet):
+    """Render a set of check boxes."""
+    template = 'field_checkbox_set'
+
+
+class SelectFieldRenderer(WidgetSet):
+    """Render a select list."""
+    template = 'field_select'
+    readonly_template = 'field_select_readonly'
+
+    def _render(self, template, options):
+        """Render the select list."""
+        if 'options' in options:
+            if isinstance(options['options'], dict):
+                options['options'] = options['options'].items()
+            options['options'] = [(v, k) for k, v in options['options']]
+        return WidgetSet._render(self, template, options)
+
 class TextFieldRenderer(BaseFieldRenderer):
     """Render a text input field."""
     template = 'field_text'
+
+
+class NumberFieldRenderer(BaseFieldRenderer):
+    """Render a number input field."""
+    template = 'field_number'
 
