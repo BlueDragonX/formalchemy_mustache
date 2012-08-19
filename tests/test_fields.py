@@ -174,6 +174,17 @@ class TestFieldRenderers(BaseCase):
         html = {'class': 'test', 'maxlength': 12}
         self.check_renderer('text', self.field, html=html)
 
+    def test_number(self):
+        """Test the NumberFieldRenderer class."""
+        html = {'class': 'test', 'min': 1, 'max': 20, 'step': 1}
+        self.check_renderer('number', self.field_quantity, html=html)
+
+    def test_checkbox(self):
+        """Test the TextFieldRenderer class."""
+        html = {'class': 'test'}
+        self.check_renderer('checkbox', self.field_instock, html=html,
+            renderer=fields.CheckBoxFieldRenderer)
+
     def test_radio_set(self):
         """Test the RadioSet class."""
         html = {'class': 'test'}

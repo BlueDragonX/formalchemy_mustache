@@ -181,6 +181,28 @@ class CheckBoxSet(WidgetSet):
     template = 'field_checkbox_set'
 
 
+class CheckBoxFieldRenderer(BaseFieldRenderer):
+    """Render a checkbox input field."""
+    template = 'field_checkbox'
+
+    def _serialized_value(self):
+        """Serialize the value."""
+        if self.name not in self.params:
+            return None
+        return FieldRenderer._serialized_value(self)
+
+    def deserialize(self):
+        """Deserialize the value as a boolean."""
+        if self._serialized_value() is None:
+            return False
+        return FieldRenderer.deserialize(self)
+
+    def _render(self, template, options):
+        """Render the field."""
+        options['selected'] = bool(self.value)
+        return BaseFieldRenderer._render(self, template, options)
+
+
 class SelectFieldRenderer(WidgetSet):
     """Render a select list."""
     template = 'field_select'
@@ -193,6 +215,7 @@ class SelectFieldRenderer(WidgetSet):
                 options['options'] = options['options'].items()
             options['options'] = [(v, k) for k, v in options['options']]
         return WidgetSet._render(self, template, options)
+
 
 class TextFieldRenderer(BaseFieldRenderer):
     """Render a text input field."""
