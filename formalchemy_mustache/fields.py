@@ -222,6 +222,12 @@ class TextFieldRenderer(BaseFieldRenderer):
     template = 'field_text'
 
 
+class PasswordFieldRenderer(BaseFieldRenderer):
+    """Render a password input field."""
+    template = 'field_password'
+    readonly_template = 'field_password_readonly'
+
+
 class NumberFieldRenderer(BaseFieldRenderer):
     """Render a number input field."""
     template = 'field_number'

@@ -179,6 +179,11 @@ class TestFieldRenderers(BaseCase):
         html = {'class': 'test', 'min': 1, 'max': 20, 'step': 1}
         self.check_renderer('number', self.field_quantity, html=html)
 
+    def test_password(self):
+        """Test the PasswordFieldRenderer class."""
+        html = {'class': 'test'}
+        self.check_renderer('password', self.field, html=html)
+
     def test_checkbox(self):
         """Test the TextFieldRenderer class."""
         html = {'class': 'test'}
