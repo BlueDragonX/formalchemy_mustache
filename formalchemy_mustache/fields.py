@@ -185,12 +185,6 @@ class CheckBoxFieldRenderer(BaseFieldRenderer):
     """Render a checkbox input field."""
     template = 'field_checkbox'
 
-    def _serialized_value(self):
-        """Serialize the value."""
-        if self.name not in self.params:
-            return None
-        return FieldRenderer._serialized_value(self)
-
     def _render(self, template, options):
         """Render the field."""
         options['selected'] = bool(self.value)
