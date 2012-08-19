@@ -1,4 +1,4 @@
-<select name="DummyModel-apple-name" class="test">
+<select id="DummyModel-apple-name" name="DummyModel-apple-name" class="test">
 	<option value="apple" selected="selected">Red Apple</option>
 	<option value="orange">Florida Orange</option>
 	<option value="grape">Green Grape</option>
