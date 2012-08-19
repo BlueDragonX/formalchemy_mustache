@@ -35,11 +35,11 @@ class BaseCase(unittest.TestCase):
 
         self.models = [
             DummyModel('apple', 
-                'a red fruit that grows on trees'),
+                'a red fruit that grows on trees', 5, True),
             DummyModel('carrot', 
-                'an orange vegetable that grows in the ground'),
+                'an orange vegetable that grows in the ground', 2, True),
             DummyModel('kiwi',
-                'a brown fruit that is not a flightless bird')]
+                'a brown fruit that is not a flightless bird', 12, False)]
         self.model = self.models[0]
 
         fs = FieldSet(DummyModel)
@@ -55,6 +55,8 @@ class BaseCase(unittest.TestCase):
         self.grid_ro = grid.bind(self.models)
 
         self.field = self.fieldset_rw.name
+        self.field_quantity = self.fieldset_rw.quantity
+        self.field_instock = self.fieldset_rw.instock
 
         self.set_options = [
             ('apple', 'Red Apple'),

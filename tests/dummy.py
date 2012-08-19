@@ -6,7 +6,7 @@
 Dummy classes for testing.
 """
 
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
@@ -57,8 +57,9 @@ class DummyModel(Base):
     name = Column(String, primary_key=True)
     text = Column(String)
     quantity = Column(Integer)
+    instock = Column(Boolean)
 
-    def __init__(self, name=None, text=None, quantity=None):
+    def __init__(self, name=None, text=None, quantity=None, instock=None):
         """Initialize the model object."""
         if name is not None:
             self.name = name
@@ -66,6 +67,8 @@ class DummyModel(Base):
             self.text = text
         if quantity is not None:
             self.quantity = quantity
+        if instock is not None:
+            self.instock = instock
 
 
 class DummyFieldSet:
