@@ -1,0 +1,2 @@
+<input id="DummyModel--name" type="number" name="DummyModel--name" max="20" step="1" class="test" min="1" />
+

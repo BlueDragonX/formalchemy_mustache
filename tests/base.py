@@ -55,8 +55,10 @@ class BaseCase(unittest.TestCase):
         self.grid_ro = grid.bind(self.models)
 
         self.field = self.fieldset_rw.name
+        self.field_text = self.fieldset_rw.text
         self.field_quantity = self.fieldset_rw.quantity
         self.field_instock = self.fieldset_rw.instock
+        self.field_none = fs.name
 
         self.set_options = [
             ('apple', 'Red Apple'),

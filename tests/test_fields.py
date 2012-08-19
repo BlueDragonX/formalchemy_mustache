@@ -148,7 +148,8 @@ class TestWidgetSet(BaseCase):
             'renderer.proxy_choices returned results of invalid length')
         for item in result:
             self.assertIn(item, expected,
-                'renderer.proxy_choices returned results with an invalid item')
+                'renderer.proxy_choices returned results with an invalid' +
+                ' item')
 
 
 class TestFieldRenderers(BaseCase):
@@ -157,61 +158,88 @@ class TestFieldRenderers(BaseCase):
     Test generated renderers.
     """
 
-    def check_renderer(self, name, field, readonly=False, **options):
+    def debug_output(self, expected, output):
+        return ("Rendered output:\n\t" +
+            output.replace("\n", "\n\t") +
+            "\nExpected output:\n\t" +
+            expected.replace("\n", "\n\t"))
+
+    def check_renderer(self, name, field, field_none=None, readonly=False,
+            **options):
         """Test a renderer."""
         configure(self.templates)
         if 'renderer' not in options:
             options['renderer'] = getattr(fields,
                 '%sFieldRenderer' % name.title())
+                
         field.set(**options)
-
         expected = self.get_output('field_%s' % name).strip()
         output = field.render().strip()
         self.assertEqual(output, expected,
-            '%s.render is invalid' % type(field.renderer).__name__)
+            "%s.render is invalid\n%s" % (type(field.renderer).__name__,
+                self.debug_output(expected, output)))
 
         if readonly:
             expected = self.get_output('field_%s_readonly' % name).strip()
             output = field.render_readonly().strip()
             self.assertEqual(output, expected,
-                '%s.render_readonly is invalid' % type(field.renderer).__name__)
+                "%s.render is invalid\n%s" % (type(field.renderer).__name__,
+                    self.debug_output(expected, output)))
+
+        if field_none:
+            field_none.set(**options)
+            expected = self.get_output('field_%s_none' % name).strip()
+            output = field_none.render().strip()
+            self.assertEqual(output, expected,
+                "%s.render is invalid for None value\n%s" % (type(field.renderer).__name__,
+                    self.debug_output(expected, output)))
+
+            if readonly:
+                expected = self.get_output('field_%s_none_readonly' %
+                    name).strip()
+                output = field_none.render_readonly().strip()
+                self.assertEqual(output, expected,
+                    "%s.render is invalid for None value\n%s" % (type(field.renderer).__name__,
+                        self.debug_output(expected, output)))
 
     def test_text(self):
         """Test the TextFieldRenderer class."""
         html = {'class': 'test', 'maxlength': 12}
-        self.check_renderer('text', self.field, html=html)
+        self.check_renderer('text', self.field, self.field_none, html=html)
 
     def test_number(self):
         """Test the NumberFieldRenderer class."""
         html = {'class': 'test', 'min': 1, 'max': 20, 'step': 1}
-        self.check_renderer('number', self.field_quantity, html=html)
+        self.check_renderer('number', self.field_quantity, self.field_none,
+            html=html)
 
     def test_password(self):
         """Test the PasswordFieldRenderer class."""
         html = {'class': 'test'}
-        self.check_renderer('password', self.field, True, html=html)
+        self.check_renderer('password', self.field, self.field_none, True,
+            html=html)
 
     def test_checkbox(self):
-        """Test the TextFieldRenderer class."""
+        """Test the CheckBoxFieldRenderer class."""
         html = {'class': 'test'}
-        self.check_renderer('checkbox', self.field_instock, html=html,
-            renderer=fields.CheckBoxFieldRenderer)
+        self.check_renderer('checkbox', self.field_instock, self.field_none,
+            html=html, renderer=fields.CheckBoxFieldRenderer)
 
     def test_radio_set(self):
         """Test the RadioSet class."""
         html = {'class': 'test'}
-        self.check_renderer('radio_set', self.field, renderer=fields.RadioSet,
-            html=html, options=self.set_options)
+        self.check_renderer('radio_set', self.field, self.field_none,
+            html=html, renderer=fields.RadioSet, options=self.set_options)
 
     def test_checkbox_set(self):
         """Test the CheckBoxSet class."""
         html = {'class': 'test'}
-        self.check_renderer('checkbox_set', self.field,
+        self.check_renderer('checkbox_set', self.field, self.field_none,
             renderer=fields.CheckBoxSet, html=html, options=self.set_options)
 
     def test_select(self):
         """Test the SelectFieldRenderer class."""
         html = {'class': 'test'}
-        self.check_renderer('select', self.field, True, html=html,
-            options=self.select_options)
+        self.check_renderer('select', self.field, self.field_none, True,
+            html=html, options=self.select_options)
 

@@ -1,0 +1,13 @@
+<div>
+	<input type="checkbox" name="DummyModel--name" value="apple" class="test" />
+	<label for="DummyModel--name">Red Apple</label>
+</div>
+<div>
+	<input type="checkbox" name="DummyModel--name" value="orange" class="test" />
+	<label for="DummyModel--name">Florida Orange</label>
+</div>
+<div>
+	<input type="checkbox" name="DummyModel--name" value="grape" class="test" />
+	<label for="DummyModel--name">Green Grape</label>
+</div>
+

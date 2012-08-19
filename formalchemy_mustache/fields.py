@@ -193,9 +193,10 @@ class CheckBoxFieldRenderer(BaseFieldRenderer):
 
     def deserialize(self):
         """Deserialize the value as a boolean."""
-        if self._serialized_value() is None:
-            return False
-        return FieldRenderer.deserialize(self)
+        print('===================================================== called deserialize')
+#        if self._serialized_value() is None:
+#            return False
+        return bool(FieldRenderer.deserialize(self))
 
     def _render(self, template, options):
         """Render the field."""

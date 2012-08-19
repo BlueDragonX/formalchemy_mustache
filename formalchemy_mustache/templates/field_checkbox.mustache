@@ -1,1 +1,1 @@
-<input id="{{name}}" type="checkbox" name="{{name}}" value="{{value}}" {{#options.selected}}checked="checked" {{/options.selected}}{{#html}}{{key}}="{{value}}" {{/html}}/>
+<input id="{{name}}" type="checkbox" name="{{name}}" {{#value}}value="{{.}}" {{/value}}{{#options.selected}}checked="checked" {{/options.selected}}{{#html}}{{key}}="{{value}}" {{/html}}/>
