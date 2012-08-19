@@ -207,6 +207,12 @@ class TestFieldRenderers(BaseCase):
         html = {'class': 'test', 'maxlength': 12}
         self.check_renderer('text', self.field, self.field_none, html=html)
 
+    def test_textarea(self):
+        """Test the TextAreaFieldRenderer class."""
+        html = {'class': 'test', 'cols': 80, 'rows': 30}
+        self.check_renderer('textarea', self.field_text, self.field_none, html=html,
+            renderer=fields.TextAreaRenderer)
+
     def test_number(self):
         """Test the NumberFieldRenderer class."""
         html = {'class': 'test', 'min': 1, 'max': 20, 'step': 1}

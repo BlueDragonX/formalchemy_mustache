@@ -210,6 +210,11 @@ class TextFieldRenderer(BaseFieldRenderer):
     template = 'field_text'
 
 
+class TextAreaRenderer(BaseFieldRenderer):
+    """Render a text field as a text area."""
+    template = 'field_textarea'
+
+
 class PasswordFieldRenderer(BaseFieldRenderer):
     """Render a password input field."""
     template = 'field_password'
