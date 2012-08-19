@@ -1,0 +1,2 @@
+<input id="DummyModel-apple-quantity" type="number" name="DummyModel-apple-quantity" value="5" max="20" step="1" class="test" min="1" />
+
