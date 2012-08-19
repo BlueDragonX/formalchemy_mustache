@@ -110,27 +110,73 @@ class TestMustacheFieldRenderer(BaseCase):
             'renderer.render is invalid')
 
 
+class TestWidgetSet(BaseCase):
+
+    """
+    Test the WidgetSet class.
+    """
+
+    class TestSet(fields.WidgetSet):
+        """Test WidgetSet class."""
+        template = 'field_radio_set'
+
+    def test_selected(self):
+        """Test the selected method."""
+        renderer = self.TestSet(self.field)
+        self.assertTrue(renderer.selected('apple'),
+            'renderer.selected is invalid for selected value')
+        self.assertFalse(renderer.selected('orange'),
+            'renderer.selected is invalid for unselected value')
+
+    def test_proxy_choices(self):
+        """Test the proxy_choices method."""
+        renderer = self.TestSet(self.field)
+        itemlist = [(1, 'one'), (2, 'two')]
+        itemdict = {1: 'one', 2: 'two'}
+        expected = [
+            {'name': renderer.name, 'value': 1, 'label': 'one', 
+                'selected': False},
+            {'name': renderer.name, 'value': 2, 'label': 'two', 
+                'selected': False}]
+
+        result = renderer.proxy_choices(itemlist)
+        self.assertEqual(result, expected,
+            'renderer.proxy_choices is invalid for lists')
+
+        result = renderer.proxy_choices(itemdict)
+        self.assertEqual(len(result), len(expected),
+            'renderer.proxy_choices returned results of invalid length')
+        for item in result:
+            self.assertIn(item, expected,
+                'renderer.proxy_choices returned results with an invalid item')
+
+
 class TestFieldRenderers(BaseCase):
 
     """
     Test generated renderers.
     """
 
-    def check_renderer(self, name, field, html):
+    def check_renderer(self, name, field, **options):
         """Test a renderer."""
         configure(self.templates)
-        classname = '%sFieldRenderer' % name.title()
-        clazz = getattr(fields, classname)
-        renderer = clazz(field)
-        field.set(renderer=renderer, html=html)
+        if 'renderer' not in options:
+            options['renderer'] = getattr(fields,
+                '%sFieldRenderer' % name.title())
+        field.set(**options)
         expected = self.get_output('field_%s' % name).strip()
         output = field.render().strip()
-
         self.assertEqual(output, expected,
-            '%s.render is invalid' % classname)
+            '%s.render is invalid' % type(field.renderer).__name__)
 
     def test_text(self):
-        """Test the TextFieldRenderer."""
+        """Test the TextFieldRenderer class."""
         html = {'class': 'test', 'maxlength': 12}
-        self.check_renderer('text', self.field, html)
+        self.check_renderer('text', self.field, html=html)
+
+    def test_radio_set(self):
+        """Test the RadioSet class."""
+        html = {'class': 'test'}
+        self.check_renderer('radio_set', self.field, renderer=fields.RadioSet,
+            html=html, options=self.options)
 

@@ -8,7 +8,7 @@ Mustache field renderers.
 
 from formalchemy import config, fields
 from pystache.renderer import Renderer
-from formalchemy_mustache.proxies import proxy_object
+from formalchemy_mustache.proxies import proxy_object, DictProxy
 
 
 class TemplateNameError(Exception):
@@ -127,9 +127,44 @@ class MustacheFieldRenderer(BaseFieldRenderer):
         BaseFieldRenderer.__init__(self, field)
 
 
+class WidgetSet(BaseFieldRenderer):
+
+    """
+    Render a set of widgets. Primarily used for rendering sets of radio buttons
+    or checkboxes.
+    """
+
+    def selected(self, choice):
+        """Check if a choice is selected."""
+        return choice == self.value
+
+    def proxy_choices(self, choices):
+        """Format and proxy the set choices."""
+        def choice(name, value, label, selected):
+            return {'name': name, 'value': value, 'label': label,
+                'selected': bool(selected)}
+        if isinstance(choices, dict):
+            choices = choices.items()
+        return [choice(self.name, value, label, self.selected(value))
+            for value, label in choices]
+
+    def _render(self, template, options):
+        """
+        Render the set. The available choices should be provided in keyword
+        parameter 'options'.
+        """
+        if 'options' not in options:
+            options['options'] = []
+        options['options'] = self.proxy_choices(options['options'])
+        return BaseFieldRenderer._render(self, template, options)
+
+
+class RadioSet(WidgetSet):
+    """Render a set of radio buttons."""
+    template = 'field_radio_set'
+
+
 class TextFieldRenderer(BaseFieldRenderer):
     """Render a text input field."""
     template = 'field_text'
-
-
 

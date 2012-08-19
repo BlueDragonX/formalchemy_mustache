@@ -1,0 +1,13 @@
+<div>
+	<input type="radio" name="DummyModel-apple-name" value="apple" checked="checked" class="test" />
+	<label for="DummyModel-apple-name">Red Apple</label>
+</div>
+<div>
+	<input type="radio" name="DummyModel-apple-name" value="orange" class="test" />
+	<label for="DummyModel-apple-name">Florida Orange</label>
+</div>
+<div>
+	<input type="radio" name="DummyModel-apple-name" value="grape" class="test" />
+	<label for="DummyModel-apple-name">Green Grape</label>
+</div>
+
