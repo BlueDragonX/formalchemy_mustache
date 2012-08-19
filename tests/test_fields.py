@@ -157,17 +157,24 @@ class TestFieldRenderers(BaseCase):
     Test generated renderers.
     """
 
-    def check_renderer(self, name, field, **options):
+    def check_renderer(self, name, field, readonly=False, **options):
         """Test a renderer."""
         configure(self.templates)
         if 'renderer' not in options:
             options['renderer'] = getattr(fields,
                 '%sFieldRenderer' % name.title())
         field.set(**options)
+
         expected = self.get_output('field_%s' % name).strip()
         output = field.render().strip()
         self.assertEqual(output, expected,
             '%s.render is invalid' % type(field.renderer).__name__)
+
+        if readonly:
+            expected = self.get_output('field_%s_readonly' % name).strip()
+            output = field.render_readonly().strip()
+            self.assertEqual(output, expected,
+                '%s.render_readonly is invalid' % type(field.renderer).__name__)
 
     def test_text(self):
         """Test the TextFieldRenderer class."""
@@ -182,7 +189,7 @@ class TestFieldRenderers(BaseCase):
     def test_password(self):
         """Test the PasswordFieldRenderer class."""
         html = {'class': 'test'}
-        self.check_renderer('password', self.field, html=html)
+        self.check_renderer('password', self.field, True, html=html)
 
     def test_checkbox(self):
         """Test the TextFieldRenderer class."""
@@ -205,6 +212,6 @@ class TestFieldRenderers(BaseCase):
     def test_select(self):
         """Test the SelectFieldRenderer class."""
         html = {'class': 'test'}
-        self.check_renderer('select', self.field, html=html,
+        self.check_renderer('select', self.field, True, html=html,
             options=self.select_options)
 
