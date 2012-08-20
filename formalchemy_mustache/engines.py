@@ -11,6 +11,9 @@ from pystache.renderer import Renderer
 from formalchemy_mustache.proxies import proxy_object
 
 
+__all__ = ['MustacheEngine']
+
+
 class MustacheEngine(TemplateEngine):
 
     """
