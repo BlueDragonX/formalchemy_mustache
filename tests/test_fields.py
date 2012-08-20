@@ -12,7 +12,7 @@ import formalchemy_mustache
 from formalchemy_mustache import fields
 from .base import BaseCase
 from .dummy import DummyModel
-from formalchemy_mustache import configure, MustacheFieldRenderer
+from formalchemy_mustache import configure
 from formalchemy import config, FieldSet
 
 
@@ -74,7 +74,7 @@ class TestMustacheFieldRenderer(BaseCase):
     def test_init_without_dirs(self):
         """Test the __init__ method without the directories param."""
         configure(self.templates)
-        renderer = MustacheFieldRenderer(self.field, self.template)
+        renderer = fields.MustacheFieldRenderer(self.field, self.template)
         self.assertEqual(renderer.field, self.field,
             'renderer.field is invalid')
         self.assertEqual(renderer.template, self.template,
@@ -86,7 +86,7 @@ class TestMustacheFieldRenderer(BaseCase):
     def test_init_with_dirs(self):
         """Test the __init__ method with the directories param."""
         configure(self.templates)
-        renderer = MustacheFieldRenderer(self.field, self.template,
+        renderer = fields.MustacheFieldRenderer(self.field, self.template,
             self.templates)
         self.assertEqual(renderer.field, self.field,
             'renderer.field is invalid')
@@ -99,7 +99,7 @@ class TestMustacheFieldRenderer(BaseCase):
     def test_render(self):
         """Test the render method."""
         configure(self.templates)
-        renderer = MustacheFieldRenderer(self.field, self.template,
+        renderer = fields.MustacheFieldRenderer(self.field, self.template,
             self.templates)
         extra = 'some extra data'
         expected = "Name: %s-%s-%s\nValue: %s\nExtra: %s" % (
