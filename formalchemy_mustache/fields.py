@@ -12,6 +12,12 @@ from formalchemy import FieldSet, fatypes
 from formalchemy_mustache.proxies import proxy_object, DictProxy
 
 
+__all__ = ['TemplateNameError', 'BaseFieldRenderer', 'MustacheFieldRenderer',
+	'WidgetSet', 'RadioSet', 'CheckBoxSet', 'CheckBoxFieldRenderer',
+	'SelectFieldRenderer', 'TextFieldRenderer', 'TextAreaFieldRenderer',
+	'PasswordFieldRenderer', 'NumberFieldRenderer', 'default_renderers']
+
+
 class TemplateNameError(Exception):
     """
     Error raised when the template name is invalid.
@@ -230,7 +236,8 @@ class NumberFieldRenderer(BaseFieldRenderer):
 def get_default_renderers():
     """
     Generate the default_renderers attribute for a FieldSet. Overrides the
-    default renderers with their formalchemy_mustache counterparts.
+    default renderers found in formalchemy.FieldSet with their
+    formalchemy_mustache counterparts.
     """
     renderers = dict(FieldSet.default_renderers)
     renderers.update({
@@ -249,4 +256,7 @@ def get_default_renderers():
         fatypes.HTML5Number: NumberFieldRenderer,
         'number': NumberFieldRenderer})
     return renderers
+
+
+default_renderers = get_default_renderers()
 
