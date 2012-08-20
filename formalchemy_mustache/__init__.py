@@ -9,9 +9,9 @@ Implement Mustaches support in FormAlchemy
 import os
 from formalchemy import config
 from formalchemy_mustache.engines import MustacheEngine
-from formalchemy_mustache.fields import MustacheFieldRenderer
 
-__all__ = ['configure', 'MustacheEngine', 'MustacheFieldRenderer']
+
+__all__ = ['configure']
 
 
 def configure(directories=None):
