@@ -77,6 +77,7 @@ class BaseFieldRenderer(fields.FieldRenderer):
             'name': self.name,
             'value': self.value,
             'label': self.field.label(),
+            'required': self.field.is_required(),
             'renderer': self,
             'field': proxy_object(self.field),
             'options': proxy_object(options),
