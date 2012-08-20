@@ -12,6 +12,10 @@ from formalchemy.tables import Grid
 from formalchemy.fields import AbstractField
 
 
+__all__ = ['proxy_fields', 'proxy_object', 'DictProxy', 'FieldProxy',
+    'FieldSetProxy', 'RowProxy', 'GridProxy']
+
+
 def proxy_fields(fields, focus=None):
     """
     Proxy a list of fields. If focus is a field object in fields then that
