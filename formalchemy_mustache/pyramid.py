@@ -12,6 +12,7 @@ import formalchemy_mustache
 from pyramid_mustache import session
 from formalchemy_mustache.engines import MustacheEngine
 
+
 __all__ = ['configure']
 
 
