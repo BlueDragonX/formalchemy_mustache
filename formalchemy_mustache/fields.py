@@ -262,7 +262,7 @@ def get_default_renderers():
 default_renderers = get_default_renderers()
 
 
-class FieldSetMixin:
+class FieldSetMixin(object):
 
     """
     This mixin overrides the default_renderers attribute and render method. The
