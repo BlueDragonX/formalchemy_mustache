@@ -21,7 +21,7 @@ class TestMustacheEngine(unittest.TestCase):
         """Set up the test data."""
         here = os.path.abspath(os.path.dirname(__file__))
         self.directories = [os.path.join(here, 'templates')]
-        self.tempalte = 'engine'
+        self.template = 'engine'
 
     def test_init(self):
         """Test the __init__ method."""
@@ -35,7 +35,7 @@ class TestMustacheEngine(unittest.TestCase):
         """Test the get_template method."""
         expected = "Test: {{test}}\n"
         engine = MustacheEngine(directories=self.directories)
-        output = engine.get_template(self.tempalte)
+        output = engine.get_template(self.template)
         self.assertEqual(output, expected,
             'engine.get_template is invalid')
 
@@ -43,8 +43,15 @@ class TestMustacheEngine(unittest.TestCase):
         data = {'test': 'this is a test'}
         expected = "Test: %s\n" % data['test']
         engine = MustacheEngine(directories=self.directories)
-        engine.templates[self.tempalte] = engine.get_template(self.tempalte)
-        output = engine.render(self.tempalte, **data)
+        output = engine.render(self.template, **data)
         self.assertEqual(output, expected,
             'engine.render is invalid')
+
+    def test_render_override(self):
+        data = {'test': 'this is a test', 'real_template': self.template}
+        expected = "Test: %s\n" % data['test']
+        engine = MustacheEngine(directories=self.directories)
+        output = engine.render('none', **data)
+        self.assertEqual(output, expected,
+            'engine.render is invalid with real_template override')
 

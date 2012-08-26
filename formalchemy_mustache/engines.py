@@ -44,11 +44,17 @@ class MustacheEngine(TemplateEngine):
 
     def render(self, name, **kw):
         """
-        Render a template.
+        Render a template. If real_template is present in kw then it will
+        override the value of name. It will be removed from kw prior to
+        rendering.
 
         :param name: The name of the template.
         :param **kw: The values to substitute in the template.
         """
+        if 'real_template' in kw:
+            name = kw['real_template']
+        if name not in self.templates:
+            self.templates[name] = self.get_template(name)
         kw = {k: proxy_object(v) for k, v in kw.iteritems()}
         template = self.templates.get(name, None)
         return self.renderer.render(template, kw)
