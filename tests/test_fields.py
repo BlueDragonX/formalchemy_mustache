@@ -249,3 +249,61 @@ class TestFieldRenderers(BaseCase):
         self.check_renderer('select', self.field, self.field_none, True,
             html=html, options=self.select_options)
 
+
+class TestFieldSet(BaseCase):
+
+    """
+    Test the FieldSet class.
+    """
+
+    def test_attributes(self):
+        """Test the default class attributes."""
+        self.assertEqual(fields.FieldSet.template, 'fieldset',
+            'FieldSet.template is invalid')
+        self.assertEqual(fields.FieldSet.readonly_template,
+            'fieldset_readonly', 'FieldSet.readonly_template is invalid')
+        self.assertEqual(fields.FieldSet.default_renderers,
+            fields.default_renderers, 'FieldSet.default_renderers is invalid')
+
+    def test_render_default(self):
+        """Test the render method with default templates."""
+        configure(self.templates)
+        fs = fields.FieldSet(DummyModel)
+        fs.bind(self.model)
+        fs.configure(include=[fs.name, fs.text])
+        expected = 'fieldset template'
+        output = fs.render()
+        self.assertEqual(expected.strip(), output.strip(),
+            'FieldSet.render is invalid')
+
+        fs = fields.FieldSet(DummyModel)
+        fs.bind(self.model)
+        fs.configure(include=[fs.name, fs.text], readonly=True)
+        expected = 'fieldset_readonly template'
+        output = fs.render()
+        self.assertEqual(expected.strip(), output.strip(),
+            'FieldSet.render is invalid when readonly')
+
+    def test_render_override(self):
+        """Test the redner method with overridden templates."""
+        class MetaFieldSet(fields.FieldSet):
+            template = 'meta_fieldset'
+            readonly_template = 'meta_fieldset_readonly'
+
+        configure(self.templates)
+        fs = MetaFieldSet(DummyModel)
+        fs.bind(self.model)
+        fs.configure(include=[fs.name, fs.text])
+        expected = 'meta_fieldset template'
+        output = fs.render()
+        self.assertEqual(expected.strip(), output.strip(),
+            'FieldSet.render is invalid')
+
+        fs = MetaFieldSet(DummyModel)
+        fs.bind(self.model)
+        fs.configure(include=[fs.name, fs.text], readonly=True)
+        expected = 'meta_fieldset_readonly template'
+        output = fs.render()
+        self.assertEqual(expected.strip(), output.strip(),
+            'FieldSet.render is invalid when readonly')
+

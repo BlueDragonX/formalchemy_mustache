@@ -8,7 +8,7 @@ Mustache field renderers.
 
 from formalchemy import config, fields
 from pystache.renderer import Renderer
-from formalchemy import FieldSet, fatypes
+from formalchemy import FieldSet as FAFieldSet, fatypes
 from formalchemy_mustache.proxies import proxy_object, DictProxy
 
 
@@ -240,7 +240,7 @@ def get_default_renderers():
     default renderers found in formalchemy.FieldSet with their
     formalchemy_mustache counterparts.
     """
-    renderers = dict(FieldSet.default_renderers)
+    renderers = dict(FAFieldSet.default_renderers)
     renderers.update({
         fatypes.String: TextFieldRenderer,
         fatypes.Unicode: TextFieldRenderer,
@@ -260,4 +260,30 @@ def get_default_renderers():
 
 
 default_renderers = get_default_renderers()
+
+
+class FieldSet(FAFieldSet):
+
+    """
+    This FieldSet sets the default_renderers to
+    formalchemy_mustache.fields.default_renderers. It also allows overriding
+    the default templates using class attributes. Those attributes are:
+
+    template -- The template to use when rendering the fieldset read/write.
+        Defaults to 'fieldset'.
+    readonly_template -- The template to use when render the fieldset readonly.
+        Defaults to 'fieldset_readonly.'
+    """
+
+    template = 'fieldset'
+    readonly_template = 'fieldset_readonly'
+    default_renderers = default_renderers
+
+    def render(self, **kw):
+        """Render the fieldset."""
+        if self.readonly:
+            kw['real_template'] = self.readonly_template
+        else:
+            kw['real_template'] = self.template
+        return FAFieldSet.render(self, **kw)
 
