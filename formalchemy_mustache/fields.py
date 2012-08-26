@@ -262,12 +262,13 @@ def get_default_renderers():
 default_renderers = get_default_renderers()
 
 
-class FieldSet(FAFieldSet):
+class FieldSetMixin:
 
     """
-    This FieldSet sets the default_renderers to
-    formalchemy_mustache.fields.default_renderers. It also allows overriding
-    the default templates using class attributes. Those attributes are:
+    This mixin overrides the default_renderers attribute and render method. The
+    default_renderers is set to formalchemy_mustache.fields.default_renderers.
+    The render() method allows overriding the default templates through class
+    attributes. Those attributes are:
 
     template -- The template to use when rendering the fieldset read/write.
         Defaults to 'fieldset'.
