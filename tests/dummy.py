@@ -11,7 +11,7 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
-class DummyPackage:
+class DummyPackage(object):
 
     """
     Dummy Pyramid package class.
@@ -22,7 +22,7 @@ class DummyPackage:
         self.__name__ = name
 
 
-class DummyConfig:
+class DummyConfig(object):
 
     """
     Dummy Pyramid config class.
@@ -71,7 +71,7 @@ class DummyModel(Base):
             self.instock = instock
 
 
-class DummyFieldSet:
+class DummyFieldSet(object):
 
     """
     Dummy FieldSet object.
