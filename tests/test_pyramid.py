@@ -33,10 +33,10 @@ class TestMustacheEngine(unittest.TestCase):
         self.directories_custom = [os.path.join(here, 'templates/forms'),
             pkgtemplates]
         self.settings_default = {
-            'mustache.templates': ':'.join(self.directories_default[:-1])}
+            'mustache.search': ','.join(self.directories_default[:-1])}
         self.config_default = DummyConfig(self.package, self.settings_default)
         self.settings_custom = {
-            'mustache.templates': ':'.join(self.directories_default[:-1]),
+            'mustache.search': ','.join(self.directories_default[:-1]),
             'mustache.forms': 'forms'}
         self.config_custom = DummyConfig(self.package, self.settings_custom)
 

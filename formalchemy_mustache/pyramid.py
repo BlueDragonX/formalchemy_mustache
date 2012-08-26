@@ -6,29 +6,49 @@
 Configure FormAlchemy to use Mustache through pyramid_mustache.
 """
 
+from __future__ import absolute_import
 import os
 import formalchemy
 import formalchemy_mustache
-from pyramid_mustache import session
+import pyramid_mustache
 from formalchemy_mustache.engines import MustacheEngine
+from pyramid.path import AssetResolver
 
 
 __all__ = ['configure']
 
+
+def resolve_search_path(path):
+    """Resolve a template form search path."""
+    if ':' in path:
+        path = [AssetResolver().resolve(path).abspath()]
+    elif os.path.isabs(path):
+        path = [path]
+    else:
+        path = [os.path.join(base, path)
+            for base in pyramid_mustache.session.search]
+    return [os.path.realpath(p) for p in path]
 
 def configure(config):
     """
     Use Pyramid to configure FormAlchemy to use Mustache.
 
     Settings:
-      mustache.forms -- A subdirectory under the templates path to search for
-        form templates in.
+      mustache.forms -- The search directories for form templates. Either a
+          comma separated list of asset specs or relative directories. If not
+          an asset spec then it will be resolved relative to the
+          mustache.search value.
     """
-    templates_key = 'mustache.forms'
+    paths = []
+    forms_key = 'mustache.forms'
     settings = config.get_settings()
-    directories = session.get_templates(config.package)
-    if templates_key in settings:
-        s = settings[templates_key]
-        directories = [os.path.join(d, s) for d in directories]
+
+    if forms_key in settings:
+        paths = settings[forms_key].split(',')
+    if len(paths) == 0:
+        paths.append('.')
+
+    directories = []
+    [directories.extend(resolve_search_path(path)) for path in paths]
     formalchemy_mustache.configure(directories)
 
